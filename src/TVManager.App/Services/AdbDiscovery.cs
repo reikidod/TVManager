@@ -12,7 +12,7 @@ internal sealed partial class AdbDiscovery
         var adb = ToolLocator.FindOnPath("adb");
         if (adb is null)
         {
-            report.Notes.Add("ADB не найден. TV Manager проверяет локальный комплект tools\android\platform-tools, каталог %LOCALAPPDATA%\TVManager\tools и PATH. Запустите scripts\Install-DeviceTools.ps1 для установки ADB.");
+            report.Notes.Add(@"ADB не найден. TV Manager проверяет локальный комплект tools\android\platform-tools, каталог %LOCALAPPDATA%\TVManager\tools и PATH. Запустите scripts\Install-DeviceTools.ps1 для установки ADB.");
             return;
         }
 

@@ -1,6 +1,6 @@
 # TV Manager 0.1.2
 
-Windows desktop tool for discovering Smart TVs and preparing platform-specific management connections. The current milestone focuses on device discovery; application removal and firmware flashing are not implemented yet.
+Windows desktop tool for discovering Smart TVs, connecting to them through official vendor tooling and managing supported settings. Application removal is available for ADB devices; firmware flashing is not implemented.
 
 ## Supported discovery paths
 
@@ -34,6 +34,18 @@ Official vendor setup pages:
 - Samsung Tizen Studio: https://developer.samsung.com/smarttv/develop/tools/tizen-studio.html
 - Samsung TV device setup: https://developer.samsung.com/smarttv/develop/getting-started/using-sdk/tv-device.html
 - LG webOS CLI: https://webostv.developer.lge.com/develop/tools/cli-installation
+
+## Connection and management
+
+Select a discovered device and press **Подключиться**. TV Manager then reads the device capabilities and enables only the operations that the platform really supports:
+
+| Platform | Connection | Read info | Apps | Screen/sound | Network inputs | Profiles / undo |
+|---|---|---|---|---|---|---|
+| Android TV / Google TV / Fire OS | ADB (USB or wireless debugging) | Yes | Installed user apps, uninstall with APK backup | Resolution, sleep timeout, music volume | Connection address, Wi-Fi state | Yes |
+| Samsung Tizen | SDB (Tizen Studio / TV SDK Tools) | Yes | Package list | No | No | No |
+| LG webOS | SSDP description (read-only; webOS CLI not integrated yet) | Yes | No | No | No | No |
+
+Every changing operation goes through **preview → explicit confirmation → execution → verification**. Settings store the previous value and can be rolled back; profiles are saved as JSON in `%LOCALAPPDATA%\TVManager\profiles`. Protected system packages are never offered for removal. webOS management and deeper Tizen settings require official developer tooling and are intentionally disabled rather than emulated.
 
 ## Build from source
 

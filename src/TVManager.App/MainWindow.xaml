@@ -30,6 +30,9 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button x:Name="DisconnectButton" Content="Отключить" Click="Disconnect_Click" IsEnabled="{Binding CanDisconnect}" Margin="0,0,10,0" />
+                <Button x:Name="ConnectButton" Content="Подключиться" Click="Connect_Click" IsEnabled="{Binding CanConnect}"
+                        Background="#2E7D5B" BorderBrush="#45A87C" Padding="18,12" Margin="0,0,10,0" />
                 <Button x:Name="CancelButton" Content="Остановить" Click="Cancel_Click" IsEnabled="False" Margin="0,0,10,0" />
                 <Button x:Name="ScanButton" Content="⌕  Найти телевизоры" Click="Scan_Click" Background="#2765B5" BorderBrush="#397FD6" Padding="20,12" />
             </StackPanel>
@@ -75,7 +78,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel>
                             <TextBlock Text="Найденные устройства" FontSize="17" FontWeight="SemiBold" />
-                            <TextBlock Text="Выберите устройство, чтобы посмотреть признаки обнаружения" FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0" />
+                            <TextBlock Text="Выберите устройство и нажмите «Подключиться»" FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0" />
                         </StackPanel>
                         <Border Grid.Column="1" Background="{StaticResource PanelAltBrush}" CornerRadius="8" Padding="10,6" VerticalAlignment="Center">
                             <TextBlock Text="{Binding DeviceCountText}" FontSize="12" FontWeight="SemiBold" Foreground="#B9D5FF" />
@@ -96,27 +99,118 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="2" Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="12" Padding="18">
-                <StackPanel>
-                    <TextBlock Text="Карточка устройства" FontSize="17" FontWeight="SemiBold" />
-                    <TextBlock Text="СВЕДЕНИЯ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" Margin="0,22,0,8" />
-                    <TextBlock Text="{Binding SelectedDevice.Name, TargetNullValue='Устройство не выбрано'}" FontSize="19" FontWeight="Bold" TextWrapping="Wrap" />
-                    <TextBlock Text="{Binding SelectedDevice.PlatformLabel, TargetNullValue='Платформа пока не определена'}" Foreground="#B8D2F8" FontSize="12" Margin="0,7,0,0" TextWrapping="Wrap" />
-                    <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,18,0,16" />
-                    <TextBlock Text="СОЕДИНЕНИЕ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedDevice.ConnectionLabel, TargetNullValue=—}" FontSize="13" Margin="0,5,0,14" />
-                    <TextBlock Text="АДРЕС / ИДЕНТИФИКАТОР" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedDevice.Address, TargetNullValue=—}" FontSize="12" Margin="0,5,0,14" TextWrapping="Wrap" />
-                    <TextBlock Text="СТАТУС" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedDevice.Status, TargetNullValue='Ожидание поиска'}" FontSize="12" Margin="0,5,0,14" TextWrapping="Wrap" />
-                    <TextBlock Text="КАК ОБНАРУЖЕНО" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedDevice.Evidence, TargetNullValue=—}" FontSize="12" Margin="0,5,0,14" TextWrapping="Wrap" />
-                    <TextBlock Text="КОММЕНТАРИЙ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedDevice.Details, TargetNullValue='После обнаружения выберите устройство для просмотра деталей.'}" FontSize="12" Margin="0,5,0,0" TextWrapping="Wrap" />
-                    <Border Background="#292B25" BorderBrush="#625633" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,22,0,0">
-                        <TextBlock Text="Обнаружение не означает авторизацию. Подключение к ADB/SDB и управление устройством будут отдельным подтверждаемым действием." Foreground="#E7D8A9" FontSize="11" TextWrapping="Wrap" />
-                    </Border>
-                </StackPanel>
+            <Border Grid.Column="2" Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="12" Padding="14">
+                <TabControl>
+                    <TabItem Header="Обзор">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel Margin="0,14,4,0">
+                                <TextBlock Text="СВЕДЕНИЯ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" />
+                                <TextBlock Text="{Binding SelectedDevice.Name, TargetNullValue='Устройство не выбрано'}" FontSize="19" FontWeight="Bold" TextWrapping="Wrap" Margin="0,6,0,0" />
+                                <TextBlock Text="{Binding SelectedDevice.PlatformLabel, TargetNullValue='Платформа пока не определена'}" Foreground="#B8D2F8" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap" />
+                                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,16,0,14" />
+
+                                <TextBlock Text="ПОДКЛЮЧЕНИЕ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
+                                <TextBlock Text="{Binding ConnectionText}" FontSize="12" Margin="0,5,0,14" TextWrapping="Wrap" />
+                                <TextBlock Text="ВОЗМОЖНОСТИ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
+                                <TextBlock Text="{Binding CapabilitiesText}" FontSize="11" Margin="0,5,0,14" TextWrapping="Wrap" />
+                                <TextBlock Text="СВЕДЕНИЯ С УСТРОЙСТВА" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
+                                <TextBlock Text="{Binding DeviceInfoText}" FontSize="12" Margin="0,5,0,10" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding ConnectionNotesText}" Foreground="#E7D8A9" FontSize="11" TextWrapping="Wrap" />
+
+                                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,18,0,14" />
+                                <TextBlock Text="КАК ОБНАРУЖЕНО" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
+                                <TextBlock Text="{Binding SelectedDevice.Evidence, TargetNullValue=—}" FontSize="11" Margin="0,5,0,14" TextWrapping="Wrap" />
+                                <TextBlock Text="КОММЕНТАРИЙ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" />
+                                <TextBlock Text="{Binding SelectedDevice.Details, TargetNullValue='После обнаружения выберите устройство для просмотра деталей.'}" FontSize="11" Margin="0,5,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <TabItem Header="Настройки">
+                        <Grid Margin="0,14,4,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Параметры читаются с подключённого устройства. Изменения требуют подтверждения." Foreground="{StaticResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8" />
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding Settings}" SelectedItem="{Binding SelectedSetting, Mode=TwoWay}"
+                                      AutoGenerateColumns="False" CanUserResizeRows="False" RowHeaderWidth="0" BorderThickness="0"
+                                      Background="Transparent" IsReadOnly="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ПАРАМЕТР" Binding="{Binding Label}" Width="1.2*" IsReadOnly="True" />
+                                    <DataGridTemplateColumn Header="ЗНАЧЕНИЕ" Width="110">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Value}" Margin="8,0" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsWritable}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="ОПИСАНИЕ" Binding="{Binding Description}" Width="1.6*" IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="Обновить" Click="Refresh_Click" IsEnabled="{Binding CanRefresh}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Применить" Click="ApplySetting_Click" IsEnabled="{Binding CanEditSettings}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Откатить" Click="UndoSetting_Click" IsEnabled="{Binding CanEditSettings}" Padding="12,9" />
+                            </StackPanel>
+                            <TextBlock Grid.Row="3" Text="{Binding ActionLogText}" Foreground="#B7C1CF" FontSize="11" TextWrapping="Wrap" Margin="0,12,0,0" />
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="Приложения">
+                        <Grid Margin="0,14,4,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Пользовательские приложения. Системные пакеты не удаляются." Foreground="{StaticResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8" />
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp, Mode=TwoWay}"
+                                      AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeRows="False" RowHeaderWidth="0"
+                                      BorderThickness="0" Background="Transparent">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ПАКЕТ" Binding="{Binding PackageId}" Width="1.6*" />
+                                    <DataGridTextColumn Header="ТИП" Binding="{Binding KindLabel}" Width="0.8*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="Обновить" Click="Refresh_Click" IsEnabled="{Binding CanRefresh}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Удалить выбранное" Click="UninstallApp_Click" IsEnabled="{Binding CanManageApps}" Padding="12,9" />
+                            </StackPanel>
+                            <TextBlock Grid.Row="3" Text="{Binding ActionLogText}" Foreground="#B7C1CF" FontSize="11" TextWrapping="Wrap" Margin="0,12,0,0" />
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="Профили">
+                        <Grid Margin="0,14,4,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Профили сохраняют текущие значения параметров. Перед применением создаётся точка отката." Foreground="{StaticResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8" />
+                            <ListBox Grid.Row="1" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile, Mode=TwoWay}" DisplayMemberPath="Name" />
+                            <TextBox Grid.Row="2" Text="{Binding ProfileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,0,0" />
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="Сохранить" Click="SaveProfile_Click" IsEnabled="{Binding CanUseProfiles}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Применить" Click="ApplyProfile_Click" IsEnabled="{Binding CanUseProfiles}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Откатить" Click="UndoProfile_Click" IsEnabled="{Binding CanUseProfiles}" Padding="12,9" Margin="0,0,8,0" />
+                                <Button Content="Удалить" Click="DeleteProfile_Click" IsEnabled="{Binding CanUseProfiles}" Padding="12,9" />
+                            </StackPanel>
+                            <TextBlock Grid.Row="4" Text="{Binding ActionLogText}" Foreground="#B7C1CF" FontSize="11" TextWrapping="Wrap" Margin="0,12,0,0" />
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </Border>
         </Grid>
 
@@ -127,9 +221,9 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="ЖУРНАЛ ПОИСКА" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" VerticalAlignment="Top" Margin="0,2,14,0" />
+                <TextBlock Text="ЖУРНАЛ" Foreground="{StaticResource MutedBrush}" FontSize="10" FontWeight="Bold" VerticalAlignment="Top" Margin="0,2,14,0" />
                 <TextBlock Grid.Column="1" Text="{Binding LogText}" Foreground="#B7C1CF" FontSize="11" TextWrapping="Wrap" />
-                <TextBlock Grid.Column="2" Text="TV Manager 0.1.0 · Windows 10/11" Foreground="{StaticResource MutedBrush}" FontSize="10" VerticalAlignment="Center" Margin="14,0,0,0" />
+                <TextBlock Grid.Column="2" Text="TV Manager 0.1.2 · Windows 10/11" Foreground="{StaticResource MutedBrush}" FontSize="10" VerticalAlignment="Center" Margin="14,0,0,0" />
             </Grid>
         </Border>
     </Grid>

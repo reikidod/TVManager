@@ -1,0 +1,9 @@
+namespace TVManager.Models;
+
+public enum ConnectionState
+{
+    Disconnected,
+    Connecting,
+    Connected,
+    Failed
+}
