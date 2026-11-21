@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "applicationVersion": "0.1.2",
+  "tools": [
+    {
+      "id": "android-platform-tools",
+      "displayName": "Android SDK Platform-Tools (ADB)",
+      "executable": "adb.exe",
+      "requiredFor": ["Android TV", "Google TV", "Amazon Fire TV"],
+      "installMode": "download-after-user-accepts-license",
+      "installPath": "%LOCALAPPDATA%/TVManager/tools/android/platform-tools",
+      "officialUrl": "https://developer.android.com/tools/releases/platform-tools"
+    },
+    {
+      "id": "samsung-tizen-sdb",
+      "displayName": "Samsung Tizen SDK Tools (SDB)",
+      "executable": "sdb.exe",
+      "requiredFor": ["Samsung Tizen authenticated device management"],
+      "installMode": "vendor-installer-and-license-acceptance",
+      "officialUrl": "https://developer.samsung.com/smarttv/develop/tools/tizen-studio.html"
+    },
+    {
+      "id": "lg-webos-discovery",
+      "displayName": "Native SSDP/UPnP discovery",
+      "requiredFor": ["LG webOS network discovery"],
+      "installMode": "bundled-in-application",
+      "externalToolRequired": false
+    },
+    {
+      "id": "lg-webos-cli",
+      "displayName": "webOS CLI (optional future management features)",
+      "requiredFor": ["Authenticated webOS developer operations"],
+      "installMode": "install-from-official-npm-package",
+      "officialUrl": "https://webostv.developer.lge.com/develop/tools/cli-installation"
+    }
+  ]
+}

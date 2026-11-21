@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>TVManager</RootNamespace>
+    <AssemblyName>TVManager</AssemblyName>
+    <Version>0.1.2</Version>
+    <Authors>TV Manager</Authors>
+    <Description>Multi-platform smart TV discovery and management shell.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="10.0.15" />
+  </ItemGroup>
+</Project>
